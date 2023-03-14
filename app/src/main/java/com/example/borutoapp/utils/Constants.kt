@@ -1,5 +1,7 @@
 package com.example.borutoapp.utils
 
+import androidx.compose.ui.unit.dp
+
 object Constants {
     const val DETAILS_ARGUMENT_KEY = "heroId"
     const val HERO_DATABASE_TABLE = "hero_table"
@@ -8,6 +10,7 @@ object Constants {
 
     const val PREFERENCES_NAME = "boruto_preferences"
     const val PREFERENCES_KEY = "on_boarding_completed"
+
 
     const val BASE_URL = "http://10.0.2.2:8080"
 

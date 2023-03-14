@@ -19,6 +19,10 @@ class HeroRemoteMediator @Inject constructor(
 
     private val heroDao = borutoDatabase.heroDao()
     private val heroRemoteKeysDao = borutoDatabase.heroRemoteKeysDao()
+
+    override suspend fun initialize(): InitializeAction {
+        return super.initialize()
+    }
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Hero>): MediatorResult {
         try {
             val page = when (loadType) {

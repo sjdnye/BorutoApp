@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.borutoapp.presentation.common.ListContent
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -32,7 +33,9 @@ fun HomeScreen(
             )
         }
     ) {
-        Box(modifier = Modifier.fillMaxWidth()){
-        }
+        ListContent(
+            heroes = allHeroes,
+            navHostController = navHostController
+        )
     }
 }
