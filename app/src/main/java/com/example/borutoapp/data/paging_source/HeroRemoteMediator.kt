@@ -21,7 +21,16 @@ class HeroRemoteMediator @Inject constructor(
     private val heroRemoteKeysDao = borutoDatabase.heroRemoteKeysDao()
 
     override suspend fun initialize(): InitializeAction {
-        return super.initialize()
+        val currentTime = System.currentTimeMillis()
+        val lastUpdated = heroRemoteKeysDao.getRemoteKeys(id = 1)?.lastUpdated ?: 0L
+        val cacheTimeOut = 5
+
+        val differenceInMinutes = (currentTime - lastUpdated) / 1000 / 60
+        return if (differenceInMinutes.toInt() <= cacheTimeOut.toInt()){
+            InitializeAction.SKIP_INITIAL_REFRESH
+        }else{
+            InitializeAction.LAUNCH_INITIAL_REFRESH
+        }
     }
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Hero>): MediatorResult {
         try {
@@ -57,7 +66,8 @@ class HeroRemoteMediator @Inject constructor(
                         HeroRemoteKeys(
                             id = hero.id,
                             prevPage = prevPage,
-                            nextPage = nextPage
+                            nextPage = nextPage,
+                            lastUpdated = response.lastUpdated
                         )
                     }
                     heroRemoteKeysDao.addAllRemoteKeys(heroRemoteKeys = keys)

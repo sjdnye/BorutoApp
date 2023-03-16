@@ -1,42 +1,41 @@
-package com.example.borutoapp.presentation.screens.home
+package com.example.borutoapp.presentation.screens.search
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.borutoapp.domain.navigation.Screen
+import androidx.room.util.query
 import com.example.borutoapp.presentation.common.ListContent
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun HomeScreen(
+fun SearchScreen(
     navHostController: NavHostController,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    searchViewModel: SearchViewModel = hiltViewModel()
 ) {
-    val allHeroes = homeViewModel.getAllHeroes.collectAsLazyPagingItems()
-
+    val heroes = searchViewModel.searchedHeroes.collectAsLazyPagingItems()
     val scaffoldState = rememberScaffoldState()
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            HomeTopBar(
+            SearchTopBar(
+                text = searchViewModel.searchQuery,
+                onTextChange = searchViewModel::updateSearchQuery,
                 onSearchClicked = {
-                    navHostController.navigate(Screen.Search.route)
+                    searchViewModel.searchHeroes(query = it)
+                },
+                onCloseClicked = {
+                    navHostController.popBackStack()
                 }
             )
         }
     ) {
-        ListContent(
-            heroes = allHeroes,
-            navHostController = navHostController
-        )
+        ListContent(heroes = heroes, navHostController = navHostController)
     }
 }

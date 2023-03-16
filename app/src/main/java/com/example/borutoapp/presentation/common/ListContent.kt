@@ -36,7 +36,6 @@ fun ListContent(
             }
         }
     }
-
 }
 
 @Composable
@@ -56,6 +55,11 @@ fun handlePagingResult(
                 false
             }
             error != null -> {
+                EmptyScreen(error = error, heroes = heroes)
+                false
+            }
+            heroes.itemCount < 1 -> {
+                EmptyScreen()
                 false
             }
             else -> true
