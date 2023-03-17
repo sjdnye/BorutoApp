@@ -4,10 +4,13 @@ import android.content.Context
 import androidx.room.Room
 import com.example.borutoapp.data.local.BorutoDatabase
 import com.example.borutoapp.data.repository.DataStoreOperationImpl
+import com.example.borutoapp.data.repository.LocalDataSourceImpl
 import com.example.borutoapp.data.repository.Repository
 import com.example.borutoapp.domain.repository.DataStoreOperation
+import com.example.borutoapp.domain.repository.LocalDataSource
 import com.example.borutoapp.domain.use_cases.UseCases
 import com.example.borutoapp.domain.use_cases.get_all_heroes.GetAllHeroesUseCase
+import com.example.borutoapp.domain.use_cases.get_selected_hero.GetSelectedHeroUseCase
 import com.example.borutoapp.domain.use_cases.read_on_boarding.ReadOnBoardingUseCase
 import com.example.borutoapp.domain.use_cases.save_on_boarding.SaveOnBoardingUseCase
 import com.example.borutoapp.domain.use_cases.search_heroes.SearchHeroesUseCase
@@ -39,6 +42,12 @@ object AppModule {
         return DataStoreOperationImpl(context = context)
     }
 
+    @Provides
+    @Singleton
+    fun provideLocalDataSource(borutoDatabase: BorutoDatabase): LocalDataSource {
+        return LocalDataSourceImpl(borutoDatabase = borutoDatabase)
+    }
+
 
     @Provides
     @Singleton
@@ -47,7 +56,8 @@ object AppModule {
             saveOnBoardingUseCase = SaveOnBoardingUseCase(repository = repository),
             readOnBoardingUseCase = ReadOnBoardingUseCase(repository = repository),
             getAllHeroesUseCase = GetAllHeroesUseCase(repository = repository),
-            searchHeroesUseCase = SearchHeroesUseCase(repository = repository)
+            searchHeroesUseCase = SearchHeroesUseCase(repository = repository),
+            getSelectedHeroUseCase = GetSelectedHeroUseCase(repository = repository)
         )
     }
 }
